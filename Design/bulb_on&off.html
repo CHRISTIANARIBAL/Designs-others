@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Bulb Toggle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Ensures both images remain the same size */
+        .bulb-image {
+            width: 160px;   /* Fixed width */
+            height: 160px;  /* Fixed height */
+            object-fit: cover; /* Prevents distortion */
+            cursor: pointer; /* Ensures only the image is clickable */
+        }
+
+        /* Prevents the glow effect from being clickable */
+        .glow {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="relative flex flex-col items-center">
+        <!-- Bulb Image (Click only on the visible part) -->
+        <img id="bulb" src="C:/Users/Admin/Documents/python/Design/bulb_off.jpg" 
+             alt="Bulb" class="bulb-image transition-all duration-300" onclick="toggleBulb()">
+        
+        <!-- Glow Effect -->
+        <div id="glow" class="absolute w-40 h-40 bg-yellow-300 opacity-0 rounded-full blur-3xl transition-opacity duration-300 glow"></div>
+    </div>
+
+    <script>
+        let isBulbOn = false;
+
+        function toggleBulb() {
+            isBulbOn = !isBulbOn;
+            document.getElementById("bulb").src = isBulbOn 
+                ? "C:/Users/Admin/Documents/python/Design/bulb_on.png" 
+                : "C:/Users/Admin/Documents/python/Design/bulb_off.jpg";
+            
+            document.getElementById("glow").style.opacity = isBulbOn ? "1" : "0";
+        }
+    </script>
+
+</body>
+</html>

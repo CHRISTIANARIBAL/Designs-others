@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireworks Animation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworksCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+
+    <script>
+        const canvas = document.getElementById("fireworksCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let isMousePressed = false;
+        let mouseX = 0, mouseY = 0;
+        let fireworkInterval;
+
+        class Particle {
+            constructor(x, y, color, velocity) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = velocity;
+                this.alpha = 1;
+                this.life = Math.random() * 80 + 60;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            update() {
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.02;
+                this.life--;
+            }
+        }
+
+        function createFirework(x, y) {
+            const particles = [];
+            const colors = ["#ff0000", "#ff7700", "#ffff00", "#00ff00", "#0077ff", "#7700ff", "#ff00ff"];
+            for (let i = 0; i < 100; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 7 + 3;
+                const velocity = {
+                    x: Math.cos(angle) * speed,
+                    y: Math.sin(angle) * speed
+                };
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particles.push(new Particle(x, y, color, velocity));
+            }
+            return particles;
+        }
+
+        let fireworks = [];
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            fireworks.forEach((firework, index) => {
+                firework.forEach((particle, i) => {
+                    particle.update();
+                    particle.draw();
+                    if (particle.alpha <= 0 || particle.life <= 0) {
+                        firework.splice(i, 1);
+                    }
+                });
+                if (firework.length === 0) {
+                    fireworks.splice(index, 1);
+                }
+            });
+        }
+
+        function startFireworks() {
+            if (!isMousePressed) return; // Only fire if holding mouse
+
+            fireworks.push(createFirework(mouseX, mouseY)); // Fire instantly
+            fireworkInterval = setInterval(() => {
+                if (isMousePressed) {
+                    fireworks.push(createFirework(mouseX, mouseY));
+                }
+            }, 100); // Keep firing every 100ms
+        }
+
+        function stopFireworks() {
+            isMousePressed = false;
+            clearInterval(fireworkInterval);
+        }
+
+        canvas.addEventListener("mousedown", (e) => {
+            isMousePressed = true;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            startFireworks(); // Fire instantly
+        });
+
+        canvas.addEventListener("mouseup", stopFireworks);
+        canvas.addEventListener("mouseleave", stopFireworks);
+
+        canvas.addEventListener("mousemove", (e) => {
+            if (isMousePressed) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            }
+        });
+
+        animate();
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
