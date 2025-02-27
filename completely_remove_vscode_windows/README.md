@@ -1,0 +1,1 @@
+This tips run only on windows if you have encountered an error, mesage this gmail (chrizzchan98@gmail.com)

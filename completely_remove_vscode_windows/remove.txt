@@ -1,0 +1,10 @@
+Uninstall from Control Panel:
+    -Open Control Panel → Programs → Uninstall a Program.
+    -Find Visual Studio Code, right-click it, and select Uninstall.
+
+
+- Then, run the "remove_all_existing_files.bat" as an administrator
+If you see this prompts (C:\Users\Admin>rmdir /s /q "%LOCALAPPDATA%\Programs\Microsoft VS Code"
+The system cannot find the file specified.) This means that the file is already deleted in the path(It's Done)
+
+-Restart your PC to ensure all files are removed.
