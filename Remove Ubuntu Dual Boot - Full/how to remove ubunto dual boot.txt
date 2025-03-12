@@ -1,0 +1,25 @@
+diskpart
+
+list disk
+
+select disk 0
+
+list partition
+
+select partition 1
+
+assign letter=r
+
+exit
+
+r:
+
+dir
+
+cd EFI
+
+dir
+
+rd ubuntu /s
+
+dir
